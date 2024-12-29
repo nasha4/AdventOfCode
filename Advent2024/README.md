@@ -34,19 +34,19 @@ Not much to say about the solution; we zip the sorted lists in part 1 and create
 
 ## [Day 2: Red-Nosed Reports](https://adventofcode.com/2024/day/2)
 [[20 LOC / 2ms / 9ms](Day02.cs)]
-Yesterday used InputHelper to invoke an `Action<string>` on each line of input but here is the more common pattern: to `yield return` each line transformed by a `Func<string, T>`.  This is very handy for functional-style solutions (which you may notice I am fond of). Warning, it can be a pain to debug though, because we can't enumerate the results more than once (the file will only be read once).
+Yesterday used [InputHelper](../InputHelper.cs) to invoke an `Action<string>` on each line of input but here is the more common pattern: to `yield return` each line transformed by a `Func<string, T>`.  This is very handy for functional-style solutions (which you may notice I am fond of). Warning, it can be a pain to debug though, because we can't enumerate the results more than once (the file will only be read once).
 
 In the LINQ comprehension for part 2 today, we omit each element one at a time, including finally omitting no elements (see the +1s), but I am pretty sure there can never be a solution that relies on no elements being removed. (If a report is safe without removing any levels, it will always still be safe after removing the first or last level.)
 
 ## [Day 3: Mull It Over](https://adventofcode.com/2024/day/3)
 [[23 LOC / 2ms / 4ms](Day03.cs)]
-Regex time!  Andrew has suggested I get a nameplate for my cubicle reading "Reg(?:ex)+pert".  I extended InputHelper with a new method to make parsing this a lot prettier.  (In other words I swept the ugly code under the rug.)
+Regex time!  Andrew has suggested I get a nameplate for my cubicle reading "Reg(?:ex)+pert".  I extended [InputHelper](../InputHelper.cs) with a new method to make parsing this a lot prettier.  (In other words I swept the ugly code under the rug.)
 
 The hard part I think was supposed to just be the input parsing.  The only cute trick is our `Aggregate()` call just turns off and on a "factor" int as we encounter `do`s and `don't`s while aggregating the running total.
 
 ## [Day 4: Ceres Search](https://adventofcode.com/2024/day/4)
 [[28 LOC / 56ms / 31ms](Day04.cs)]
-Although I don't use it at all here, this day is when I started developing what would eventually become the very useful [GridHelper](../Cartesian.cs).  Initially it was just a collection of functions for adding and bounding 2d vectors (as ValueTuples, like we do in today's solution), but it grew from there to support N-dimensional grids and, for some reason, non-integer coordinates. (I think I was anticipating having to use longs so I made it a generic `T : INumeric<T>`.)
+Although I don't use it at all here, this day is when I started developing what would eventually become the very useful [GridHelper](../Cartesian.cs).  Initially it was just a collection of functions for adding and bounding 2d vectors (as ValueTuples, like we do in today's solution), but it grew from there to support N-dimensional grids and, for some reason, non-integer coordinates. (I think I was anticipating having to use longs so I made it a generic `T : INumber<T>`.)
 
 ## [Day 5: Print Queue](https://adventofcode.com/2024/day/5)
 [[24 LOC / 9ms / 2ms](Day05.cs)]
@@ -66,7 +66,8 @@ My original solution was the obvious straightforward one, with a `char[,]` array
 [[16 LOC / 10ms / 27ms](Day07.cs)]
 I really enjoyed this one!  It seems like most participants used a recursive solution today, but I approached this one by starting with the test value and working backwards, *unapplying* the operations and pruning branches that are impossible.  If we are left with any branches that match the first operand, well, we've found that many solutions.  Here's an example:
 
-### `292: 11 6 16 20`
+**`292: 11 6 16 20`**
+
 1. Consider x + 20 = 292 or y * 20 = 292 (or for part 2, z || 20 = 292).  Well, x could be 272, but there are no positive integer solutions for y or z.
 2. Consider x + 16 = 272 or y * 16 = 272 or z || 16 = 272.  Here we find two intermediate possibilities, x = 256 or y = 17, so in our Aggregate expressions, `potentials` is a collection of both those values.
 3. Consider x + 6 = 256 or 17, y * 6 = 256 or 17, z || 6 = 256 or 17.  We now have three potentials, x = 250 or 11, or z = 25.
@@ -76,7 +77,7 @@ I expected it to be slow to string-manipulate and reparse the numbers for the ||
 
 ## [Day 8: Resonant Collinearity](https://adventofcode.com/2024/day/8)
 [[25 LOC / 2ms / 27ms](Day08.cs)]
-I think the biggest challenge in this puzzle was figuring out what the heck the puzzle is even asking for.  Sometimes that is fun and leads to a satisfying "a-ha!" moment but I did not really find that the case today.  GridHelper does us some favors here (again, sweeping the ugly code under the carpet) but otherwise this is fairly tedious algebra.  Not my favorite puzzle and the code is not the most pleasant to look at.  Let's move on!
+I think the biggest challenge in this puzzle was figuring out what the heck the puzzle is even asking for.  Sometimes that is fun and leads to a satisfying "a-ha!" moment but I did not really find that the case today.  [GridHelper](../Cartesian.cs) does us some favors here (again, sweeping the ugly code under the rug) but otherwise this is fairly tedious algebra.  Not my favorite puzzle and the code is not the most pleasant to look at.  Let's move on!
 
 ## [Day 9: Disk Fragmenter](https://adventofcode.com/2024/day/9)
 [[56 LOC / 12ms / 15ms](Day09.cs)]
@@ -148,7 +149,7 @@ This one was right up my alley.  I am very pleased with the elegant efficient no
 
 ## [Day 20: Race Condition](https://adventofcode.com/2024/day/20)
 [[34 LOC / 282ms / 869ms](Day20.cs)]
-Haha, pathfinding with a PriorityQueue.  I made the (initial) assumption for part 2 that every shortcut would lead from somewhere on the best (non-cheating) path, to another spot on the best path.  I didn't exepect this to give me the right answer but it did, so it was a little unsatisfying because I don't see any reason why this should be true.  Mightn't there be cases where pathing down a blind alley (off the beaten path) and then activating the cheat is a major shortcut?  Or teleporting into a blind alley, for that matter?  Evidently the puzzle input is *so* contrived that this can never happen, but I don't see why.
+Haha, pathfinding with a PriorityQueue.  I made the (initial) assumption for part 2 that every shortcut would lead from somewhere on the best (non-cheating) path, to another spot on the best path.  I didn't expect this to give me the right answer but it did, so it was a little unsatisfying because I don't see any reason why this should be true.  Mightn't there be cases where pathing down a blind alley (off the beaten path) and then activating the cheat is a major shortcut?  Or teleporting into a blind alley, for that matter?  Evidently the puzzle input is *so* contrived that this can never happen, but I don't see why.
 
 ## [Day 21: Keypad Conundrum](https://adventofcode.com/2024/day/21)
 [[72 LOC / 12ms / 423ms](Day21.cs)]
@@ -165,14 +166,14 @@ We're in the home stretch now, so I am no longer worried about runtimes > 1000ms
 Part 2 is the [Maximum Clique Problem](https://en.wikipedia.org/wiki/Clique_problem#Finding_maximum_cliques_in_arbitrary_graphs) which is NP-hard.  Evidently there are "known" algorithms to approach this, but not known by me!  I suspect the puzzle designer included some special property of the input that we can exploit, but I have no idea what that might be, and I am satisfied with the simplicity of my solution even if it's a little slow (2–3 seconds to find the maximum clique of 13 within the graph of 520 vertices and 3380 edges):
 
 1. Define a way to determine if two cliques are the same, so we don't waste time with duplicates. A clique is a (canonically ordered) set of vertices, so to do this we implement `IEqualityComparer<string[]>`.
-2. Generate the full adjacency graph from the puzzle input.  Oh gosh some corner of my brain just remembered something from linear algebra class: if we treat the adjacency graph as a matrix, I think we can just take successively greater powers of that matrix to solve this puzzle.  [Is that real?](https://en.wikipedia.org/wiki/Adjacency_matrix#Matrix_powers)
+2. Generate the full adjacency graph from the puzzle input.  Oh gosh some corner of my brain just remembered something from linear algebra class: if we treat the adjacency graph as a matrix, I think we can just take successively greater powers of that matrix to solve this puzzle.  [Is that real?](https://en.wikipedia.org/wiki/Adjacency_matrix#Matrix_powers) Chat, how hard is it to repeatedly multiply a 520×520 matrix?? 🤔
 3. Find all cliques of size 1.  That's just every vertex, easy.
 4. Repeatedly try to grow each clique to size n+1.  That means finding the intersection of the neighbors of each member of that clique: if there are none, the clique can't be grown; otherwise the clique can be grown by including any vertex in that intersection.
 5. The puzzle assures us that there is only one maximum clique, so once we only have one left, we are done.
 
 ## [Day 24: Crossed Wires](https://adventofcode.com/2024/day/24)
 [[29 LOC / 31ms / 3ms](Day24.cs)]
-This one was great!  Part 2 really felt like debugging a circuit; I kept none of my debug code but examining the structure of the gate inputs and scouring for inconsistencies was a really entertaining mystery, and getting the circuit working was quite satisfying.  (If that sounds miserable to you, this might not be the puzzle for you.)  I did part 2 "manually" but I do think it can be done algorithmically, and if I'm really bored someday maybe I will take a stab at it.
+This one was great!  Part 2 really felt like debugging a circuit; I kept none of my debug code but examining the structure of the gate inputs and scouring for inconsistencies was a really entertaining mystery, and getting the circuit working was quite satisfying.  (If that sounds miserable, this might not be the puzzle for you.)  I did part 2 "manually" but I do think it can be done algorithmically, and if I'm really bored someday maybe I will take a stab at it.
 
 ## [Day 25: Code Chronicle](https://adventofcode.com/2024/day/25)
 [[13 LOC / 115ms](Day25.cs)]
