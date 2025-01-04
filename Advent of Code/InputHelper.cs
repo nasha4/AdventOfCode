@@ -7,10 +7,9 @@ public partial class InputHelper : IDisposable
     private readonly StreamReader reader;
     private bool _disposed;
 
-    public static async Task<InputHelper?> Create(Type type, string? sample = null)
+    public static InputHelper? Create(Type type, string? sample = null)
     {
-        var (year, day) = (int.Parse(type.Namespace?.Split('.')[^1][^4..] ?? "0"), int.Parse(type.Name[^2..]));
-        var file = new FileInfo($@"Advent{year}\input\{sample ?? string.Empty}{day:D2}.txt");
+        var file = new FileInfo($@"Advent{IAdventPuzzle.Year(type)}\input\{sample ?? string.Empty}{IAdventPuzzle.Day(type)}.txt");
         return file.Exists ? new(file.Open(options)) : null;
     }
 
@@ -20,6 +19,11 @@ public partial class InputHelper : IDisposable
     {
         for (var line = reader.ReadLine(); line is not null; line = reader.ReadLine())
             action(line);
+    }
+    public IEnumerable<string> EachLine()
+    {
+        for (var line = reader.ReadLine(); line is not null; line = reader.ReadLine())
+            yield return line;
     }
     public IEnumerable<T> EachLine<T>(Func<string, T> function)
     {
@@ -45,7 +49,7 @@ public partial class InputHelper : IDisposable
     }
     public IEnumerable<T> EachSection<T>(Func<IEnumerable<string>, T> function)
     {
-        return DoubleLineBreak().Split(reader.ReadToEnd())
+        return DoubleLineBreak().Split(reader.ReadToEnd().TrimEnd())
             .Select(section => section.Split("\n"))
             .Select(function);
     }
