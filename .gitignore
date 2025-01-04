@@ -363,4 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Do not publish AoC input files to source control
-/Advent2024/input/*
+Advent of Code/Advent*/input/*

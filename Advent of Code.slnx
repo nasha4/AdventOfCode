@@ -1,6 +1,0 @@
-<Solution>
-  <Project Path="../AdventTest/AdventTest.csproj">
-    <BuildDependency Project="Advent of Code.csproj" />
-  </Project>
-  <Project Path="Advent of Code.csproj" />
-</Solution>
