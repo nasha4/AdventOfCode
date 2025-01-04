@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/Solution Items/" Id="e605071c-6e9f-47b5-a769-7f9ced20b408">
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="LICENSE.txt" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="Advent of Code/Advent of Code.csproj" />
+  <Project Path="AdventTest/AdventTest.csproj">
+    <BuildDependency Project="Advent of Code/Advent of Code.csproj" />
+  </Project>
+</Solution>
