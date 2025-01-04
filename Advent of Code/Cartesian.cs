@@ -4,6 +4,9 @@ using System.Numerics;
 
 namespace Advent_of_Code;
 
+public class GridHelper(IEnumerable<object>? grid = null) : Cartesian<int>.GridHelper(grid ?? []);
+public class GridHelper<T>(IEnumerable<object> grid) : Cartesian<int>.GridHelper<T>(grid) where T : notnull;
+
 public static class Cartesian<T> where T : INumber<T>
 {
     private static readonly T[] adj = [-T.One, T.One];
@@ -82,11 +85,10 @@ public static class Cartesian<T> where T : INumber<T>
 
     [SuppressMessage("Major Code Smell", "S2743:Static fields should not be used in generic types", Justification = "but I wanna")]
     private readonly static ArrayComparer arrayComparer = new();
-    public class GridHelper(IEnumerable<object>? grid = null, Func<char, char>? func = null) : GridHelper<char>(grid ?? [], func);
-    public class GridHelper<TItem>(IEnumerable<object> grid, Func<TItem, TItem>? func = null) : GridHelper<TItem, TItem>(grid, func) where TItem : notnull;
+    public class GridHelper(IEnumerable<object> grid) : GridHelper<char>(grid);
 
     [SuppressMessage("Critical Code Smell", "S3218:Inner class members should not shadow outer class \"static\" or type members", Justification = "<Pending>")]
-    public class GridHelper<TIn, TItem> : EqualityComparer<T[]>, IComparer<T[]> where TItem : notnull
+    public class GridHelper<TItem> : EqualityComparer<T[]>, IComparer<T[]> where TItem : notnull
     {
         protected IReadOnlyDictionary<TItem, IReadOnlySet<T[]>> MyItems { get; }
         protected IReadOnlyDictionary<T[], TItem> MyGrid { get; }
@@ -99,14 +101,13 @@ public static class Cartesian<T> where T : INumber<T>
         public IReadOnlySet<T[]> this[TItem index] => MyItems.GetValueOrDefault(index, _empty);
 
         private static readonly IReadOnlySet<T[]> _empty = Enumerable.Empty<T[]>().ToHashSet(new ArrayComparer());
-        private static IEnumerable<KeyValuePair<T[], TItem>> BuildLookup(IEnumerable<object> grid, Func<TIn, TItem>? func, T[] indices) =>
-            grid.Zip(Sequence, (x, i) => (x, func) switch
+        private static IEnumerable<KeyValuePair<T[], TItem>> BuildLookup(IEnumerable<object> grid, T[] indices) =>
+            grid.Zip(Sequence, (x, i) => x switch
             {
-                (TIn v, not null) => [new([.. indices, i], func(v))],
-                (TItem v, null) => [new([.. indices, i], v)],
-                (IEnumerable e, _) => BuildLookup(e.Cast<object>(), func, [.. indices, i]),
-                (object o, _) => throw new InvalidCastException($"Cannot cast {o.GetType()} to either {nameof(IEnumerable)} or {(func is null ? typeof(TItem) : typeof(TIn))}"),
-                (null, _) => throw new ArgumentNullException(nameof(x))
+                TItem v => [new([.. indices, i], v)],
+                IEnumerable e => BuildLookup(e.Cast<object>(), [.. indices, i]),
+                object o => throw new InvalidCastException($"Cannot cast {o.GetType()} to either {nameof(IEnumerable)} or {typeof(TItem)}"),
+                null => throw new ArgumentNullException(nameof(x))
             }).SelectMany(x => x);
 
         public int Compare(T[]? x, T[]? y) => arrayComparer.Compare(x, y);
@@ -117,9 +118,9 @@ public static class Cartesian<T> where T : INumber<T>
         public IEnumerable<T[]> Orthogonal(T[] source, T factor) => Cartesian<T>.Orthogonal(source, factor, Min, Size);
         public T TaxiCab(T[] a, T[] b) => a.Zip(b, (m, n) => T.Abs(m - n)).Aggregate((acc, term) => acc + term);
 
-        public GridHelper(IEnumerable<object> grid, Func<TIn, TItem>? func = null)
+        public GridHelper(IEnumerable<object> grid)
         {
-            var lookup = BuildLookup(grid, func, []).ToList();
+            var lookup = BuildLookup(grid, []).ToList();
             MyGrid = lookup.ToDictionary(this);
             MyItems = lookup.GroupBy(p => p.Value, p => p.Key).ToDictionary(g => g.Key, g => g.ToHashSet(this) as IReadOnlySet<T[]>);
             Size = lookup.Count == 0 ? [] : lookup[^1].Key.Select(n => n + T.One).ToArray();
