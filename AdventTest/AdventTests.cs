@@ -6,6 +6,7 @@ namespace AdventTest;
 public static class AdventTests
 {
     [Theory]
+    [ClassData(typeof(AdventSolutions2020))]
     [ClassData(typeof(AdventSolutions2022))]
     [ClassData(typeof(AdventSolutions2024))]
     public static void TestPuzzle(Type day, int part, string solution)
@@ -18,7 +19,7 @@ public static class AdventTests
 
 public abstract class AdventSolutions : TheoryData<Type, int, string>
 {
-    protected abstract Dictionary<Type, IEnumerable<string>> Solutions { get; }
+    protected abstract IReadOnlyDictionary<Type, IEnumerable<string>> Solutions { get; }
     protected AdventSolutions() => AddRange(
         Solutions.SelectMany(kvp => kvp.Value.Select((x, i) => new TheoryDataRow<Type, int, string>(kvp.Key, i + 1, x)
             .WithTestDisplayName($"{IAdventPuzzle.Year(kvp.Key)}.{IAdventPuzzle.Day(kvp.Key)}.{i + 1}")

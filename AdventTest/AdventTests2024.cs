@@ -4,9 +4,7 @@ namespace AdventTest;
 
 public class AdventSolutions2024 : AdventSolutions
 {
-    protected override Dictionary<Type, IEnumerable<string>> Solutions => solutions;
-
-    private static readonly Dictionary<Type, IEnumerable<string>> solutions = new()
+    protected override Dictionary<Type, IEnumerable<string>> Solutions { get; } = new()
     {
         [typeof(Day01)] = ["2196996", "23655822"],
         [typeof(Day02)] = ["252", "324"],
