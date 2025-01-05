@@ -1,0 +1,16 @@
+{
+  "profiles": {
+    "Advent2020": {
+      "commandName": "Project",
+      "commandLineArgs": "Advent2020"
+    },
+    "Advent2022": {
+      "commandName": "Project",
+      "commandLineArgs": "Advent2022"
+    },
+    "Advent2024": {
+      "commandName": "Project",
+      "commandLineArgs": "Advent2024"
+    }
+  }
+}

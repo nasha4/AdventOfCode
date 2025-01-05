@@ -7,7 +7,7 @@ internal static class Program
     private static void Main(string[] args)
     {
         var totalElapsed = 0L;
-        foreach (var puzzle in IAdventPuzzle.GetPuzzles(nameof(Advent2022)))
+        foreach (var puzzle in IAdventPuzzle.GetPuzzles(args[0]))
         {
             for (int part = 1; part <= (puzzle.Name == "Day25" ? 1 : 2); part++)
             {
