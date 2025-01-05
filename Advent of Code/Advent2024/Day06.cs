@@ -2,12 +2,12 @@
 
 public class Day06(bool isPart1) : IAdventPuzzle
 {
-    private Cartesian<int>.GridHelper? grid;
+    private GridHelper? grid;
     private Dictionary<int, HashSet<int>> wallsByRow = [];
     private Dictionary<int, HashSet<int>> wallsByCol = [];
     public string Solve(InputHelper inputHelper)
     {
-        grid = new(inputHelper.EachLine(line => line));
+        grid = new(inputHelper.EachLine());
         wallsByRow = grid['#'].GroupBy(p => p[0], p => p[1]).ToDictionary(g => g.Key, g => g.ToHashSet());
         wallsByCol = grid['#'].GroupBy(p => p[1], p => p[0]).ToDictionary(g => g.Key, g => g.ToHashSet());
         var guard0 = grid['^'].Single();

@@ -4,7 +4,7 @@ public class Day12(bool isPart1) : IAdventPuzzle
 {
     public string Solve(InputHelper inputHelper)
     {
-        var grid = new Cartesian<int>.GridHelper(inputHelper.EachLine(line => line));
+        var grid = new GridHelper(inputHelper.EachLine());
         var corners = new[] { 1, 0, 0, 1, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 0, 1 }.Chunk(2).Chunk(2);
 
         var perimeters = new List<int>();

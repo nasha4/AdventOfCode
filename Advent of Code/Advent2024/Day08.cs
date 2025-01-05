@@ -4,7 +4,7 @@ public class Day08(bool isPart1) : IAdventPuzzle
 {
     public string Solve(InputHelper inputHelper)
     {
-        var antennae = new Cartesian<int>.GridHelper(inputHelper.EachLine(x => x));
+        var antennae = new GridHelper(inputHelper.EachLine());
         var pairs = antennae.Items.Where(i => i != '.').ToDictionary(i => i, i =>
             antennae[i].SelectMany(a => antennae[i], (a, b) => (a, b)).Where(p => antennae.Compare(p.a, p.b) < 0));
         var antinodes = pairs.SelectMany(p => p.Value)

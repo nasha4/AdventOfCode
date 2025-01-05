@@ -1,11 +1,11 @@
-using Advent_of_Code;
 using Advent_of_Code.Advent2024;
-using Xunit;
 
 namespace AdventTest;
 
-public static class Advent2024_Should
+public class AdventSolutions2024 : AdventSolutions
 {
+    protected override Dictionary<Type, IEnumerable<string>> Solutions => solutions;
+
     private static readonly Dictionary<Type, IEnumerable<string>> solutions = new()
     {
         [typeof(Day01)] = ["2196996", "23655822"],
@@ -34,19 +34,4 @@ public static class Advent2024_Should
         [typeof(Day24)] = ["61495910098126", "61633350099662"],
         [typeof(Day25)] = ["2950"]
     };
-
-    public static TheoryData<Type, int, string> Solutions() => new(
-        solutions.SelectMany(kvp => kvp.Value.Select((x, i) => new TheoryDataRow<Type, int, string>(kvp.Key, i + 1, x)
-            .WithTestDisplayName($"{kvp.Key.Name[^5..]} part{i + 1} = {x}")
-            .WithTrait("Day", kvp.Key.Name[^2..])
-            .WithTrait("part", $"{i + 1}"))));
-
-    [Theory]
-    [MemberData(nameof(Solutions))]
-    public static async Task TestAll(Type day, int part, string solution)
-    {
-        using var input = await InputHelper.Create(day);
-        var puzzle = IAdventPuzzle.Solver(day, part);
-        Assert.Equal(solution, puzzle.Solve(input!));
-    }
 }
