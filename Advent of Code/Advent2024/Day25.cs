@@ -4,7 +4,7 @@ public class Day25(bool isPart1) : IAdventPuzzle
 {
     public string Solve(InputHelper inputHelper)
     {
-        var schematics = inputHelper.EachSection(section => new Cartesian<int>.GridHelper(section));
+        var schematics = inputHelper.EachSection(section => new GridHelper(section));
         var codes = schematics.GroupBy(grid => grid[[0, 0]],
                 grid => Enumerable.Range(0, 5).Select(x => grid['#'].Count(xy => xy[1] == x)))
             .ToDictionary(g => g.Key, g => g.AsEnumerable());

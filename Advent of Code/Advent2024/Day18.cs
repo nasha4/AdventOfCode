@@ -6,7 +6,7 @@ public class Day18(bool isPart1) : IAdventPuzzle
     {
         var obstacles = inputHelper.EachLine(line => line.Split(',').Select(int.Parse).ToArray()).ToArray();
 
-        var comparer = new Cartesian<int>.GridHelper();
+        var comparer = new GridHelper();
         if (isPart1) return FindPath(obstacles[..1024].ToHashSet(comparer), comparer).ToString();
 
         var (min, max) = (1024, obstacles.Length);
