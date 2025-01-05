@@ -4,7 +4,7 @@ public class Day20(bool isPart1) : IAdventPuzzle
 {
     public string Solve(InputHelper inputHelper)
     {
-        var racetrack = new Cartesian<int>.GridHelper(inputHelper.EachLine(x => x));
+        var racetrack = new GridHelper(inputHelper.EachLine());
         var (start, goal) = (racetrack['S'].Single(), racetrack['E'].Single());
 
         var search = new PriorityQueue<int[], int>([(start, 0)]);
