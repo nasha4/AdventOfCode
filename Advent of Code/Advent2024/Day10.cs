@@ -17,11 +17,10 @@ public class Day10(bool isPart1) : IAdventPuzzle
         {
             foreach (var p in grid[height])
             {
-                foreach (var q in grid.Orthogonal(p).Where(adj => grid[adj] == height + 1))
-                {
-                    score[p] = score.GetValueOrDefault(p, []).Union(score.GetValueOrDefault(q, []));
-                    rating[p] = rating.GetValueOrDefault(p) + rating.GetValueOrDefault(q);
-                }
+                (score[p], rating[p]) = grid.Orthogonal(p)
+                    .Where(adj => grid[adj] == height + 1)
+                    .Aggregate((score: Enumerable.Empty<int[]>(), rating: 0), (acc, term) =>
+                        (acc.score.Union(score.GetValueOrDefault(term, []), grid), acc.rating + rating.GetValueOrDefault(term, 0)));
             }
         }
         return grid[0].Sum(p => isPart1 ? score[p].Count() : rating[p]).ToString();

@@ -14,8 +14,8 @@ public class Day08(bool isPart1) : IAdventPuzzle
 
     private static IEnumerable<int[]> CheckVisibility(GridHelper<int> trees, char orientation)
     {
-        var aRange = Enumerable.Range(0, trees.Size[0]);
-        var bRange = Enumerable.Range(0, trees.Size[1]);
+        var aRange = Enumerable.Range(0, trees.Max[0]);
+        var bRange = Enumerable.Range(0, trees.Max[1]);
         if ("EW".Contains(orientation)) // vertical, so swap x and y (swap them back again later)
             (aRange, bRange) = (bRange, aRange);
         if ("ES".Contains(orientation)) // negative, so reverse the inner loop
@@ -37,7 +37,7 @@ public class Day08(bool isPart1) : IAdventPuzzle
     }
     private static int ScenicScore(GridHelper<int> trees, int x, int y)
     {
-        var (xMax, yMax) = (trees.Size[1] - 1, trees.Size[0] - 1);
+        var (xMax, yMax) = (trees.Max[1] - 1, trees.Max[0] - 1);
         int n, s, e, w; // look in each direction until we find a value >= our start tree (or find the edge)
         for (e = x + 1; e < xMax && trees[[y, e]] < trees[[y, x]]; e++) ;
         for (w = x - 1; w > 0 && trees[[y, w]] < trees[[y, x]]; w--) ;

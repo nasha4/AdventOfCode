@@ -51,8 +51,8 @@ public class Day06(bool isPart1) : IAdventPuzzle
         int[] end = dir switch
         {
             0 => [wallsByCol.GetValueOrDefault(guard[1], []).Where(y => y < guard[0]).Order().LastOrDefault(grid.Min[0] - 2), guard[1]],
-            2 => [wallsByCol.GetValueOrDefault(guard[1], []).Where(y => y > guard[0]).Order().FirstOrDefault(grid.Size[0] + 1), guard[1]],
-            1 => [guard[0], wallsByRow.GetValueOrDefault(guard[0], []).Where(x => x > guard[1]).Order().FirstOrDefault(grid.Size[1] + 1)],
+            2 => [wallsByCol.GetValueOrDefault(guard[1], []).Where(y => y > guard[0]).Order().FirstOrDefault(grid.Max[0] + 1), guard[1]],
+            1 => [guard[0], wallsByRow.GetValueOrDefault(guard[0], []).Where(x => x > guard[1]).Order().FirstOrDefault(grid.Max[1] + 1)],
             _ => [guard[0], wallsByRow.GetValueOrDefault(guard[0], []).Where(x => x < guard[1]).Order().LastOrDefault(grid.Min[1] - 2)]
         };
         var n = Math.Abs(guard[0] - end[0] + guard[1] - end[1]);

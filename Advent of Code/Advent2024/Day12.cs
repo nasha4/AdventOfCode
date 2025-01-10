@@ -23,10 +23,10 @@ public class Day12(bool isPart1) : IAdventPuzzle
                     var adj = grid.Orthogonal(q).Where(a => grid[a] == grid[q]);
                     adj.Where(a => !regions.ContainsKey(a)).ToList().ForEach(flood.Enqueue);
                     perimeters[^1] += 4 - adj.Count();
-                    sides[^1] += corners.Count(corner => corner.All(c => grid[q] != grid[Cartesian<int>.VectorAdd(q, c)]));
+                    sides[^1] += corners.Count(corner => corner.All(c => grid[q] != grid[Cartesian<int>.VectorSum(q, c)]));
                     sides[^1] += corners.Count(corner => corner.All(c =>
-                        grid[q] == grid[Cartesian<int>.VectorAdd(q, c)] &&
-                        grid[q] != grid[Cartesian<int>.VectorAdd([q, .. corner])]));
+                        grid[q] == grid[Cartesian<int>.VectorSum(q, c)] &&
+                        grid[q] != grid[Cartesian<int>.VectorSum([q, .. corner])]));
                 }
             }
         }

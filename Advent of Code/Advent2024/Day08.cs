@@ -8,7 +8,7 @@ public class Day08(bool isPart1) : IAdventPuzzle
         var pairs = antennae.Items.Where(i => i != '.').ToDictionary(i => i, i =>
             antennae[i].SelectMany(a => antennae[i], (a, b) => (a, b)).Where(p => antennae.Compare(p.a, p.b) < 0));
         var antinodes = pairs.SelectMany(p => p.Value)
-            .SelectMany(p => FindAntinodes(p.a, p.b, antennae.Size, isPart1))
+            .SelectMany(p => FindAntinodes(p.a, p.b, antennae.Max, isPart1))
             .Where(an => antennae[an] != default);
 
         return antinodes.Distinct(antennae).Count().ToString();
