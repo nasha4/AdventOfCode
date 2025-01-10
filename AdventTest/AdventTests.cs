@@ -19,9 +19,9 @@ public static class AdventTests
 
 public abstract class AdventSolutions : TheoryData<Type, int, string>
 {
-    protected abstract IReadOnlyDictionary<Type, IEnumerable<string>> Solutions { get; }
+    protected abstract IReadOnlyDictionary<Type, IEnumerable<object>> Solutions { get; }
     protected AdventSolutions() => AddRange(
-        Solutions.SelectMany(kvp => kvp.Value.Select((x, i) => new TheoryDataRow<Type, int, string>(kvp.Key, i + 1, x)
+        Solutions.SelectMany(kvp => kvp.Value.Select((x, i) => new TheoryDataRow<Type, int, string>(kvp.Key, i + 1, x.ToString() ?? string.Empty) 
             .WithTestDisplayName($"{IAdventPuzzle.Year(kvp.Key)}.{IAdventPuzzle.Day(kvp.Key)}.{i + 1}")
             .WithTrait("Year", IAdventPuzzle.Year(kvp.Key))
             .WithTrait("Day", IAdventPuzzle.Day(kvp.Key))
