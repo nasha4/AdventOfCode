@@ -4,6 +4,9 @@ public class Day17(bool isPart1) : IAdventPuzzle
 {
     public string Solve(InputHelper inputHelper)
     {
-        return string.Empty;
+        var lines = inputHelper.EachLine();
+        var grid = isPart1 ? new GridHelper([lines]) : new GridHelper([new[] { lines }.AsEnumerable()]);
+
+        return "";
     }
 }
