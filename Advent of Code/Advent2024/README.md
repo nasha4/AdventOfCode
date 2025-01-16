@@ -46,7 +46,7 @@ The hard part I think was supposed to just be the input parsing.  The only cute 
 
 ## [Day 4: Ceres Search](https://adventofcode.com/2024/day/4)
 [[28 LOC / 56ms / 31ms](Day04.cs)]
-Although I don't use it at all here, this day is when I started developing what would eventually become the very useful [GridHelper](../Cartesian.cs).  Initially it was just a collection of functions for adding and bounding 2d vectors (as ValueTuples, like we do in today's solution), but it grew from there to support N-dimensional grids and, for some reason, non-integer coordinates. (I think I was anticipating having to use longs so I made it a generic `T : INumber<T>`.)
+Although I don't use it at all here, this day is when I started developing what would eventually become the very useful [Grid.Helper](../Cartesian.cs).  Initially it was just a collection of functions for adding and bounding 2d vectors (as ValueTuples, like we do in today's solution), but it grew from there to support N-dimensional grids and, for some reason, non-integer coordinates. (I think I was anticipating having to use longs so I made it a generic `T : INumber<T>`.)
 
 ## [Day 5: Print Queue](https://adventofcode.com/2024/day/5)
 [[24 LOC / 9ms / 2ms](Day05.cs)]
@@ -60,7 +60,7 @@ It took me a while to realize that this was not a bug in my tree search, but a d
 
 ## [Day 6: Guard Gallivant](https://adventofcode.com/2024/day/6)
 [[70 LOC / 25ms / 518ms](Day06.cs)]
-My original solution was the obvious straightforward one, with a `char[,]` array.  It was fewer lines of code, but *slow* (8-12 seconds for part 2 iirc).  I revisted this on Day 23 or so, armed with a fully-fledged [GridHelper](../Cartesian.cs) and optimized it to do collision detection much quicker.  Checking grid[y,x] is slow, checking grid['#'] is slow, but indexing the obstacles by column and row got the runtime down to acceptable levels.  Note that only part 1 cares about counting each tile we've visited; so for part 2 we can track only the tiles where the guard turns (collisions) to detect a loop.
+My original solution was the obvious straightforward one, with a `char[,]` array.  It was fewer lines of code, but *slow* (8-12 seconds for part 2 iirc).  I revisted this on Day 23 or so, armed with a fully-fledged [Grid.Helper](../Cartesian.cs) and optimized it to do collision detection much quicker.  Checking grid[y,x] is slow, checking grid['#'] is slow, but indexing the obstacles by column and row got the runtime down to acceptable levels.  Note that only part 1 cares about counting each tile we've visited; so for part 2 we can track only the tiles where the guard turns (collisions) to detect a loop.
 
 ## [Day 7: Bridge Repair](https://adventofcode.com/2024/day/7)
 [[16 LOC / 10ms / 27ms](Day07.cs)]
@@ -77,7 +77,7 @@ I expected it to be slow to string-manipulate and reparse the numbers for the ||
 
 ## [Day 8: Resonant Collinearity](https://adventofcode.com/2024/day/8)
 [[25 LOC / 2ms / 27ms](Day08.cs)]
-I think the biggest challenge in this puzzle was figuring out what the heck the puzzle is even asking for.  Sometimes that is fun and leads to a satisfying "a-ha!" moment but I did not really find that the case today.  [GridHelper](../Cartesian.cs) does us some favors here (again, sweeping the ugly code under the rug) but otherwise this is fairly tedious algebra.  Not my favorite puzzle and the code is not the most pleasant to look at.  Let's move on!
+I think the biggest challenge in this puzzle was figuring out what the heck the puzzle is even asking for.  Sometimes that is fun and leads to a satisfying "a-ha!" moment but I did not really find that the case today.  [Grid.Helper](../Cartesian.cs) does us some favors here (again, sweeping the ugly code under the rug) but otherwise this is fairly tedious algebra.  Not my favorite puzzle and the code is not the most pleasant to look at.  Let's move on!
 
 ## [Day 9: Disk Fragmenter](https://adventofcode.com/2024/day/9)
 [[56 LOC / 12ms / 15ms](Day09.cs)]
@@ -177,4 +177,4 @@ This one was great!  Part 2 really felt like debugging a circuit; I kept none of
 
 ## [Day 25: Code Chronicle](https://adventofcode.com/2024/day/25)
 [[13 LOC / 115ms](Day25.cs)]
-Finishing things off with a very easy one.  A key fits a lock whenever none of they key's pin lengths plus the lock's respective pin length exceeds 5 (7 in my implementation because I count the "zero" length).  We get more mileage out of [GridHelper](../Cartesian.cs) and [InputHelper](../InputHelper.cs) here, making the 2D grid input a breeze to parse.
+Finishing things off with a very easy one.  A key fits a lock whenever none of they key's pin lengths plus the lock's respective pin length exceeds 5 (7 in my implementation because I count the "zero" length).  We get more mileage out of [Grid.Helper](../Cartesian.cs) and [InputHelper](../InputHelper.cs) here, making the 2D grid input a breeze to parse.

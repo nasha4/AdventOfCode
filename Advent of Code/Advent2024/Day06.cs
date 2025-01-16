@@ -2,7 +2,7 @@
 
 public class Day06(bool isPart1) : IAdventPuzzle
 {
-    private GridHelper? grid;
+    private Grid.Helper grid = new();
     private Dictionary<int, HashSet<int>> wallsByRow = [];
     private Dictionary<int, HashSet<int>> wallsByCol = [];
     public string Solve(InputHelper inputHelper)
@@ -51,8 +51,8 @@ public class Day06(bool isPart1) : IAdventPuzzle
         int[] end = dir switch
         {
             0 => [wallsByCol.GetValueOrDefault(guard[1], []).Where(y => y < guard[0]).Order().LastOrDefault(grid.Min[0] - 2), guard[1]],
-            2 => [wallsByCol.GetValueOrDefault(guard[1], []).Where(y => y > guard[0]).Order().FirstOrDefault(grid.Max[0] + 1), guard[1]],
-            1 => [guard[0], wallsByRow.GetValueOrDefault(guard[0], []).Where(x => x > guard[1]).Order().FirstOrDefault(grid.Max[1] + 1)],
+            2 => [wallsByCol.GetValueOrDefault(guard[1], []).Where(y => y > guard[0]).Order().FirstOrDefault(grid.Max[0] + 2), guard[1]],
+            1 => [guard[0], wallsByRow.GetValueOrDefault(guard[0], []).Where(x => x > guard[1]).Order().FirstOrDefault(grid.Max[1] + 2)],
             _ => [guard[0], wallsByRow.GetValueOrDefault(guard[0], []).Where(x => x < guard[1]).Order().LastOrDefault(grid.Min[1] - 2)]
         };
         var n = Math.Abs(guard[0] - end[0] + guard[1] - end[1]);

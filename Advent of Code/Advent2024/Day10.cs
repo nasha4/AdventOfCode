@@ -4,7 +4,7 @@ public class Day10(bool isPart1) : IAdventPuzzle
 {
     public string Solve(InputHelper inputHelper)
     {
-        var grid = new GridHelper<int>(inputHelper.EachLine(line => line.Select(c => c - '0')));
+        var grid = new Grid.Helper<int>(inputHelper.EachLine(line => line.Select(c => c - '0')));
         var score = new Dictionary<int[], IEnumerable<int[]>>(grid);
         var rating = new Dictionary<int[], int>(grid);
 
