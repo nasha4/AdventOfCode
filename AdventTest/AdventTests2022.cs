@@ -28,7 +28,7 @@ public class AdventSolutions2022 : AdventSolutions
         [typeof(Day13)] = [5_588, 23_958],
         [typeof(Day14)] = [805, 25_161],
         [typeof(Day15)] = [5_181_556, 12_817_603_219_131],
-        [typeof(Day16)] = [1_651, 1_707],
+        [typeof(Day16)] = [1_944, 2_679],
         [typeof(Day17)] = [3_157, 1_581_449_275_319],
         [typeof(Day18)] = [3_496, 2_064],
         [typeof(Day19)] = [1_346, 7_644],
