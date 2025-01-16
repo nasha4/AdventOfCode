@@ -4,14 +4,14 @@ public class Day12(bool isPart1) : IAdventPuzzle
 {
     public string Solve(InputHelper inputHelper)
     {
-        var grid = new GridHelper(inputHelper.EachLine());
+        var grid = new Grid.Helper(inputHelper.EachLine());
         var startFrom = grid[isPart1 ? 'S' : 'a'];
         return $"{FindPath(startFrom, grid).Count() - 1}";
     }
 
     private static int Height(char c) => c switch { 'E' => 'z', 'S' => 'a', _ => c };
 
-    private static IEnumerable<int[]> FindPath(IEnumerable<int[]> startingSquares, GridHelper grid)
+    private static IEnumerable<int[]> FindPath(IEnumerable<int[]> startingSquares, Grid.Helper grid)
     {
         var toSearch = new Queue<int[]>(startingSquares);
         var visitedFrom = startingSquares.ToDictionary(s => s, s => null as int[], grid);

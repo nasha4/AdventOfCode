@@ -4,7 +4,7 @@ public class Day08(bool isPart1) : IAdventPuzzle
 {
     public string Solve(InputHelper inputHelper)
     {
-        var trees = new GridHelper<int>(inputHelper.EachLine(line => line.Select(c => c - '0')));
+        var trees = new Grid.Helper<int>(inputHelper.EachLine(line => line.Select(c => c - '0')));
 
         return isPart1
             ? "NSEW".Aggregate(Enumerable.Empty<int[]>(),
@@ -12,10 +12,9 @@ public class Day08(bool isPart1) : IAdventPuzzle
             : trees.Points.Max(p => ScenicScore(trees, p[1], p[0])).ToString();
     }
 
-    private static IEnumerable<int[]> CheckVisibility(GridHelper<int> trees, char orientation)
+    private static IEnumerable<int[]> CheckVisibility(Grid.Helper<int> trees, char orientation)
     {
-        var aRange = Enumerable.Range(0, trees.Max[0]);
-        var bRange = Enumerable.Range(0, trees.Max[1]);
+        var (aRange, bRange) = (trees.Ranges[0], trees.Ranges[1]);
         if ("EW".Contains(orientation)) // vertical, so swap x and y (swap them back again later)
             (aRange, bRange) = (bRange, aRange);
         if ("ES".Contains(orientation)) // negative, so reverse the inner loop
@@ -35,13 +34,12 @@ public class Day08(bool isPart1) : IAdventPuzzle
             }
         }
     }
-    private static int ScenicScore(GridHelper<int> trees, int x, int y)
+    private static int ScenicScore(Grid.Helper<int> trees, int x, int y)
     {
-        var (xMax, yMax) = (trees.Max[1] - 1, trees.Max[0] - 1);
         int n, s, e, w; // look in each direction until we find a value >= our start tree (or find the edge)
-        for (e = x + 1; e < xMax && trees[[y, e]] < trees[[y, x]]; e++) ;
+        for (e = x + 1; e < trees.Max[1] && trees[[y, e]] < trees[[y, x]]; e++) ;
         for (w = x - 1; w > 0 && trees[[y, w]] < trees[[y, x]]; w--) ;
-        for (s = y + 1; s < yMax && trees[[s, x]] < trees[[y, x]]; s++) ;
+        for (s = y + 1; s < trees.Max[0] && trees[[s, x]] < trees[[y, x]]; s++) ;
         for (n = y - 1; n > 0 && trees[[n, x]] < trees[[y, x]]; n--) ;
         return (y - n) * (y - s) * (x - e) * (x - w);
     }
