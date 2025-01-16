@@ -12,7 +12,7 @@ public class Day10(bool isPart1) : IAdventPuzzle
         {
             var sortedJolts = jolts.Order();
             var gapCount = sortedJolts.Zip(sortedJolts.Skip(1), (a, b) => b - a)
-                .GroupBy(x => x).ToDictionary(g => g.Key, g => g.Count());
+                .CountBy(x => x).ToDictionary();
 
             return $"{gapCount[1] * gapCount[3]}";
         }
