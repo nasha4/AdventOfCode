@@ -6,7 +6,7 @@ public partial class Day03(bool isPart1) : IAdventPuzzle
 {
     public string Solve(InputHelper inputHelper)
     {
-        var instructions = inputHelper.EachMatchGroup(Instruction(), groups =>
+        var instructions = inputHelper.EachMatchGroup(Instruction, groups =>
             string.IsNullOrWhiteSpace(groups[1])
                 ? (instruction: "mul", a: int.Parse(groups[2]), b: int.Parse(groups[3]))
                 : (instruction: groups[1], a: 0, b: 0));
@@ -23,5 +23,5 @@ public partial class Day03(bool isPart1) : IAdventPuzzle
     }
 
     [GeneratedRegex(@"(do|don't)\(\)|mul\((\d{1,3}),(\d{1,3})\)")]
-    private static partial Regex Instruction();
+    private static partial Regex Instruction { get; }
 }

@@ -28,8 +28,7 @@ public class Day18(bool isPart1) : IAdventPuzzle
         var reachable = new HashSet<int[]>(grid);
         while (search.TryDequeue(out var tile, out var score))
         {
-            if (!reachable.Add(tile)) continue;
-            if (grid[tile]) continue;
+            if (!reachable.Add(tile) || grid[tile]) continue;
             if (tile.SequenceEqual([70, 70])) return score;
             search.EnqueueRange(grid.Orthogonal(tile).Select(p => (p, score + 1)));
         }

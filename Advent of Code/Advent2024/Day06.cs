@@ -70,8 +70,8 @@ public class Day06(bool isPart1) : IAdventPuzzle
             .Select(d => dir switch
             {
                 0 => [step.Key[0] + d, step.Key[1]],
-                1 => [step.Key[0], step.Key[1] - d],
                 2 => [step.Key[0] - d, step.Key[1]],
+                1 => [step.Key[0], step.Key[1] - d],
                 _ => new[] { step.Key[0], step.Key[1] + d },
             }));
 }

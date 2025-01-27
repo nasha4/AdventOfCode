@@ -1,5 +1,4 @@
-﻿
-namespace Advent_of_Code.Advent2020;
+﻿namespace Advent_of_Code.Advent2020;
 
 public class Day13(bool isPart1) : IAdventPuzzle
 {

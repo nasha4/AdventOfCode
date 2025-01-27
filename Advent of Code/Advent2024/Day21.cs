@@ -69,7 +69,7 @@ public partial class Day21(bool isPart1) : IAdventPuzzle
             robots.Add(new(grid, robots[i].Sequences));
 
         return inputHelper.EachLine(line => (
-                numeric: long.Parse(Integer().Match(line).ValueSpan),
+                numeric: long.Parse(Integer.Match(line).ValueSpan),
                 transitions: line.Prepend('A').Zip(line).ToDictionary(x => x, _ => 1L)))
             .Sum(FinalScore).ToString();
 
@@ -78,5 +78,5 @@ public partial class Day21(bool isPart1) : IAdventPuzzle
     }
 
     [GeneratedRegex(@"-?\d+")]
-    private static partial Regex Integer();
+    private static partial Regex Integer { get; }
 }

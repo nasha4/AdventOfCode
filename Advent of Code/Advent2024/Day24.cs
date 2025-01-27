@@ -9,7 +9,7 @@ public partial class Day24(bool isPart1) : IAdventPuzzle
     public string Solve(InputHelper inputHelper)
     {
         wires = inputHelper.EachLineInSection(line => line.Split(": ")).ToDictionary(x => x[0], x => x[1] == "1");
-        gates = inputHelper.EachLineInSection(line => Gate().Match(line))
+        gates = inputHelper.EachLineInSection(line => Gate.Match(line))
             .ToDictionary(x => x.Groups[4].Value, x => (a: x.Groups[1].Value, b: x.Groups[3].Value, op: x.Groups[2].Value));
 
         if (!isPart1)
@@ -31,5 +31,5 @@ public partial class Day24(bool isPart1) : IAdventPuzzle
         };
 
     [GeneratedRegex(@"(...) (AND|OR|XOR) (...) -> (...)")]
-    private static partial Regex Gate();
+    private static partial Regex Gate { get; }
 }

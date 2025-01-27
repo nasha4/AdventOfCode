@@ -1,6 +1,4 @@
-﻿using Microsoft.VisualBasic;
-
-namespace Advent_of_Code.Advent2020;
+﻿namespace Advent_of_Code.Advent2020;
 
 public class Day12(bool isPart1) : IAdventPuzzle
 {
