@@ -60,7 +60,7 @@ public abstract class Grid<T> where T : INumber<T>
         public static (Cartesian<T>, Dictionary<T[], TItem>, Dictionary<TItem, HashSet<T[]>>) FromDiagram(IEnumerable<object> diagram)
         {
             var lookup = BuildLookup(diagram, []).ToList();
-            var max = lookup.Count == 0 ? [] : lookup[^1].Key;
+            var max = lookup.Count == 0 ? [] : lookup[^1].Key.ToArray();
             var space = new Cartesian<T>(max);
             var grid = lookup.ToDictionary(ArrayComparer<T>.Comparer);
             var items = lookup.GroupBy(p => p.Value, p => p.Key).ToDictionary(g => g.Key, g => g.ToHashSet(ArrayComparer<T>.Comparer));
@@ -68,7 +68,7 @@ public abstract class Grid<T> where T : INumber<T>
         }
         protected static (Cartesian<T>, Dictionary<T[], TItem>, Dictionary<TItem, HashSet<T[]>>) FromSet(IReadOnlySet<T[]> set)
         {
-            var (min, max) = set.Aggregate((min: set.First(), max: set.First()),
+            var (min, max) = set.Aggregate((min: set.First().ToArray(), max: set.First().ToArray()),
                 (found, next) => (min: found.min.Zip(next, (a, b) => T.Min(a, b)).ToArray(), max: found.max.Zip(next, (a, b) => T.Max(a, b)).ToArray()));
             var space = new Cartesian<T>(max, min);
             var grid = set.ToDictionary(s => s, _ => true, ArrayComparer<T>.Comparer);
@@ -77,7 +77,7 @@ public abstract class Grid<T> where T : INumber<T>
         }
         protected static (Cartesian<T>, Dictionary<T[], TItem>, Dictionary<TItem, HashSet<T[]>>) FromDictionary(IReadOnlyDictionary<T[], TItem> map)
         {
-            var (min, max) = map.Keys.Aggregate((min: map.First().Key, max: map.First().Key),
+            var (min, max) = map.Keys.Aggregate((min: map.First().Key.ToArray(), max: map.First().Key.ToArray()),
                 (found, next) => (min: found.min.Zip(next, (a, b) => T.Min(a, b)).ToArray(), max: found.max.Zip(next, (a, b) => T.Max(a, b)).ToArray()));
             var space = new Cartesian<T>(max, min);
             var grid = map.ToDictionary(ArrayComparer<T>.Comparer);
@@ -87,13 +87,15 @@ public abstract class Grid<T> where T : INumber<T>
 
         public virtual bool Add(T[] point, TItem item)
         {
-            if (MyGrid.TryGetValue(point, out var oldItem) && oldItem is not null)
-                MyItems[oldItem].Remove(point);
+            if (MyGrid.TryGetValue(point, out var oldItem) && MyItems.TryGetValue(oldItem, out var oldSet))
+                oldSet.Remove(point);
+            MyGrid[point] = item;
+
             if (MyItems.TryGetValue(item, out var set))
                 set.Add(point);
             else
                 MyItems[item] = new(ArrayComparer<T>.Comparer) { point };
-            MyGrid[point] = item;
+
             return Space.ExpandToContain(point);
         }
     }
