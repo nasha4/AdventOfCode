@@ -4,8 +4,9 @@ public interface IAdventPuzzle
 {
     string Solve(InputHelper inputHelper);
 
-    public static IEnumerable<Type> GetPuzzles(string annualNamespace) =>
-        Enumerable.Range(1, 25).Select(day => Type.GetType($"Advent_of_Code.{annualNamespace}.Day{day:D2}")).OfType<Type>();
+    public static IEnumerable<(Type type, int parts)> GetPuzzles(string annualNamespace, int day) =>
+        (day == 0 ? Enumerable.Range(1, 25) : [day]).Select(d => Type.GetType($"Advent_of_Code.{annualNamespace}.Day{d:D2}"))
+            .OfType<Type>().Select(t => (t, t.Name == "Day25" ? 1 : 2));
 
     public static IAdventPuzzle Solver(Type type, int part) => Activator.CreateInstance(type, [part == 1]) as IAdventPuzzle
         ?? throw new ArgumentException($"Could not create {nameof(IAdventPuzzle)} from type {type}");
