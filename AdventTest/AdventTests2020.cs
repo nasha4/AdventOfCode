@@ -24,7 +24,7 @@ public class AdventSolutions2020 : AdventSolutions
         [typeof(Day16)] = [19_240, 21_095_351_239_483],
         [typeof(Day17)] = [273, 1_504],
         [typeof(Day18)] = [11_297_104_473_091, 185_348_874_183_674],
-        [typeof(Day19)] = [string.Empty, string.Empty],
+        [typeof(Day19)] = [269, 403],
         [typeof(Day20)] = [273, string.Empty],
         [typeof(Day21)] = [2_317, "kbdgs,sqvv,slkfgq,vgnj,brdd,tpd,csfmb,lrnz"],
         [typeof(Day22)] = [32_629, 32_519],
