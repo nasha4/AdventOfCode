@@ -14,16 +14,12 @@ public partial class Day04(bool isPart1) : IAdventPuzzle
         ["hcl"] = HclPattern.IsMatch,
         ["pid"] = PidPattern.IsMatch,
         ["ecl"] = validEcls.Contains,
-        ["hgt"] = static hgt =>
-        {
-            var match = HgtPattern.Match(hgt);
-            return match.Success && (int.Parse(match.Groups[1].Value), match.Groups[2].Value) switch
+        ["hgt"] = static hgt => HgtPattern.Match(hgt) switch
             {
-                (var u, "cm") when u is >= 150 and <= 193 => true,
-                (var u, "in") when u is >=  59 and <=  76 => true,
+                { Groups: [_, var n, { Value: "cm" }] } when int.Parse(n.ValueSpan) is >= 150 and <= 193 => true,
+                { Groups: [_, var n, { Value: "in" }] } when int.Parse(n.ValueSpan) is >=  59 and <=  76 => true,
                 _ => false
-            };
-        },
+            },
         ["cid"] = static _ => true
     };
 

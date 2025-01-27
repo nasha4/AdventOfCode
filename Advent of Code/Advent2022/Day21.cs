@@ -8,41 +8,24 @@ public partial class Day21(bool isPart1) : IAdventPuzzle
     private readonly record struct Algebraic
     {
         public readonly long? N { get; }
-        public readonly Stack<(char op, long other)> Operations { get; init; }
+        private readonly Stack<(char op, long other)> Operations { get; }
         public Algebraic(long? n) => (N, Operations) = (n, new());
-        private Algebraic(Algebraic copy) => (N, Operations) = (copy.N, new(copy.Operations.Reverse())); // Did you know Stacks copy in reverse? I do now!
+        private Algebraic(Algebraic copy, params IEnumerable<(char op, long other)> moreOps) =>
+            (N, Operations) = (copy.N, new([.. copy.Operations.Reverse(), .. moreOps]));
 
-        public Algebraic Operate(char op, Algebraic b)
+        public Algebraic Operate(char op, Algebraic other) => (N, other.N, op) switch
         {
-            switch (N, b.N, op)
-            {
-                case (null, null, _):
-                    throw new ArgumentNullException(nameof(b), "Only one unknown supported");
-                case (null, long bN, _):
-                    var c = new Algebraic(this);
-                    c.Operations.Push((op, bN));
-                    return c;
-                case (long aN, null, '+' or '*'):
-                    c = new Algebraic(b);
-                    c.Operations.Push((op, aN));
-                    return c;
-                case (long aN, null, '-'):
-                    c = new Algebraic(b);
-                    c.Operations.Push(('*', -1));
-                    c.Operations.Push(('+', aN));
-                    return c;
-                case (long aN, long bN, '+'):
-                    return new Algebraic(aN + bN);
-                case (long aN, long bN, '-'):
-                    return new Algebraic(aN - bN);
-                case (long aN, long bN, '*'):
-                    return new Algebraic(aN * bN);
-                case (long aN, long bN, '/'):
-                    return new Algebraic(aN / bN);
-                case (_, _, _):
-                    throw new NotSupportedException("operation not supported");
-            }
-        }
+            (null, null, _) => throw new ArgumentNullException(nameof(other), "Only one unknown supported"),
+            (null, long bN, _) => new Algebraic(this, (op, bN)),
+            (long aN, null, '+' or '*') => new Algebraic(other, (op, aN)),
+            (long aN, null, '-') => new Algebraic(other, ('*', -1), ('+', aN)),
+            (long aN, long bN, '+') => new Algebraic(aN + bN),
+            (long aN, long bN, '-') => new Algebraic(aN - bN),
+            (long aN, long bN, '*') => new Algebraic(aN * bN),
+            (long aN, long bN, '/') => new Algebraic(aN / bN),
+            _ => throw new NotSupportedException("operation not supported"),
+        };
+
         public override string ToString()
         {
             if (N is not null) return N.Value.ToString();
@@ -60,15 +43,14 @@ public partial class Day21(bool isPart1) : IAdventPuzzle
             var sum = new Algebraic(b);
             while (a.Operations.TryPop(out var pair))
             {
-                var undo = pair.op switch
+                sum = sum.Operate(pair.op switch
                 {
                     '+' => '-',
                     '-' => '+',
                     '*' => '/',
                     '/' => '*',
                     _ => '!'
-                };
-                sum = sum.Operate(undo, new Algebraic(pair.other));
+                }, new Algebraic(pair.other));
             }
             return sum;
         }

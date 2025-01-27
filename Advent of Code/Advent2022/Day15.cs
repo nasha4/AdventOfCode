@@ -25,11 +25,10 @@ public class Day15(bool isPart1) : IAdventPuzzle
 
     public string Solve(InputHelper inputHelper)
     {
-        var test = false;
         var intervals = Enumerable.Empty<Interval>();
         var sensors = new List<(int x, int y, int r)>();
         var beacons = new HashSet<(int x, int y)>();
-        var part1Row = test ? 10 : 2_000_000;
+        var part1Row = 2_000_000;
         foreach (var line in inputHelper.EachLine(line => line.Split('=', ',', ':').Chunk(2).Select(p => int.Parse(p[1])).ToArray()))
         {
             var (sensor, beacon) = ((x: line[0], y: line[1]), (x: line[2], y: line[3]));
@@ -47,7 +46,6 @@ public class Day15(bool isPart1) : IAdventPuzzle
         if (isPart1)
             return $"{intervals.Sum(i => i.Size) - beacons.Count(b => b.y == part1Row)}";
 
-        //var interestingYValues = Enumerable.Range(0, test ? 21 : 4_000_001); // this works but takes ~4100ms
         var interestingYValues = sensors
             .SelectMany(_ => sensors, (a, b) => (a, b))
             .Where(p => p.a != p.b)
@@ -58,7 +56,7 @@ public class Day15(bool isPart1) : IAdventPuzzle
                 // only 2 or 0 solutions are actual intersections
                 new[] { -1, 1 }.SelectMany(_ => new[] { -1, 1 }.SelectMany(_ => new[] { -1, 1 }, (b, a) => (b, a)), (c, t) => (t.a, t.b, c))
                     .Select(f => (f.a * sensor.a.r + f.b * sensor.b.r + f.c * sensor.a.x - f.c * sensor.b.x + sensor.a.y + sensor.b.y) / 2)
-                    .Where(y => y >= 0 && y <= (test ? 20 : 4_000_000)
+                    .Where(y => y >= 0 && y <= 4_000_000
                         && y >= sensor.a.y - sensor.a.r && y <= sensor.a.y + sensor.a.r
                         && y >= sensor.b.y - sensor.b.r && y <= sensor.b.y + sensor.b.r)));
 
@@ -70,7 +68,7 @@ public class Day15(bool isPart1) : IAdventPuzzle
         {
             intervals = [ // our missing beacon might be on the edge! it's not though.
                 new(-1, -1),
-                test ? new(21, 21) : new(4_000_001, 4_000_001)
+                new(4_000_001, 4_000_001)
             ];
             foreach (var (sensorX, sensorY, radius) in sensors)
             {

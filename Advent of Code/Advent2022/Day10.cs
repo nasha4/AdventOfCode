@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace Advent_of_Code.Advent2022;
+﻿namespace Advent_of_Code.Advent2022;
 
 public class Day10(bool isPart1) : IAdventPuzzle
 {

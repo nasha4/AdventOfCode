@@ -14,13 +14,13 @@ public class Day16(bool isPart1) : IAdventPuzzle
 
         var validTickets = tickets.Append(myTicket).Where(ticket => !ticket.Any(n => !fields.SelectMany(x => x.Value).Any(f => f.from <= n && f.to >= n)));
         var couldBe = Enumerable.Range(0, myTicket.Length).Select(i => fields.Keys.Where(k => validTickets.Select(t => t[i]).All(tv => fields[k].Any(r => r.from <= tv && r.to >= tv))).ToHashSet()).ToArray();
-        Dictionary<bool, List<HashSet<string>>> solved;
-        for (solved = new() { [false] = [] };
-            solved.ContainsKey(false);
-            solved = couldBe.GroupBy(h => h.Count == 1).ToDictionary(g => g.Key, g => g.ToList()))
-            solved[false].ForEach(hs => hs.ExceptWith(solved[true].SelectMany(x => x)));
-        var solution = solved[true].Select((x, i) => KeyValuePair.Create(x.Single(), i)).ToDictionary();
 
-        return fields.Keys.Where(k => k.Contains("departure")).Select(k => myTicket[solution[k]]).Aggregate(1L, (product, term) => product * term).ToString();
+        for (var deduced = couldBe.GroupBy(h => h.Count == 1).ToDictionary(g => g.Key, g => g.ToList());
+            deduced.ContainsKey(false);
+            deduced = couldBe.GroupBy(h => h.Count == 1).ToDictionary(g => g.Key, g => g.ToList()))
+            deduced[false].ForEach(hs => hs.ExceptWith(deduced[true].Select(x => x.Single())));
+        var solution = couldBe.Select((x, i) => KeyValuePair.Create(x.Single(), i)).ToDictionary();
+
+        return fields.Keys.Where(k => k.StartsWith("departure")).Select(k => myTicket[solution[k]]).Aggregate(1L, (product, term) => product * term).ToString();
     }
 }

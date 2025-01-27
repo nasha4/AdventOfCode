@@ -43,5 +43,4 @@ public class Day08(bool isPart1) : IAdventPuzzle
         for (n = y - 1; n > 0 && trees[[n, x]] < trees[[y, x]]; n--) ;
         return (y - n) * (y - s) * (x - e) * (x - w);
     }
-
 }

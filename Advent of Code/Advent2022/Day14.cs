@@ -23,26 +23,18 @@ public class Day14(bool isPart1) : IAdventPuzzle
             while (sandY < caveDepth || !isPart1)
             {
                 if (!isPart1 && sandY > caveDepth)
-                {
-                    cave.Add((sandX, sandY));
                     break;
-                }
-                else if (!cave.Contains((sandX, sandY + 1)))
-                    (sandX, sandY) = (sandX + 0, sandY + 1);
-                else if (!cave.Contains((sandX - 1, sandY + 1)))
-                    (sandX, sandY) = (sandX - 1, sandY + 1);
-                else if (!cave.Contains((sandX + 1, sandY + 1)))
-                    (sandX, sandY) = (sandX + 1, sandY + 1);
+                else if (new[] { sandX, sandX - 1, sandX + 1 }.FirstOrDefault(x => !cave.Contains((x, sandY + 1))) is var x and > 0)
+                    (sandX, sandY) = (x, sandY + 1);
                 else
-                {
-                    cave.Add((sandX, sandY));
                     break;
-                }
             }
             if (sandY >= caveDepth && isPart1)
                 return $"{sandCount}"; // don't count the last sand, it fell into the abyss
-            if (sandY == 0)
+            else if (sandY == 0)
                 return $"{sandCount + 1}"; // do count the last sand, it settled at the source
+            else
+                cave.Add((sandX, sandY));
         }
     }
 }
