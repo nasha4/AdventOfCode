@@ -12,8 +12,9 @@ public static class AdventTests
     public static void TestPuzzle(Type day, int part, string solution)
     {
         using var input = InputHelper.Create(day);
+        ArgumentNullException.ThrowIfNull(input);
         var puzzle = IAdventPuzzle.Solver(day, part);
-        Assert.Equal(solution, puzzle.Solve(input!));
+        Assert.Equal(solution, puzzle.Solve(input));
     }
 }
 
