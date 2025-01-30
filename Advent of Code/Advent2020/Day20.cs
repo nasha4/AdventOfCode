@@ -1,7 +1,4 @@
-﻿
-using System.Text;
-
-namespace Advent_of_Code.Advent2020;
+﻿namespace Advent_of_Code.Advent2020;
 
 public class Day20(bool isPart1) : IAdventPuzzle
 {
@@ -30,56 +27,61 @@ public class Day20(bool isPart1) : IAdventPuzzle
             .GroupBy(p => p.edge.First, p => p.tile.Rotate(4 - p.edge.Second))
             .ToDictionary(g => new string(g.Key.Reverse().ToArray()), g => g.ToArray());
 
-        var corners = tiles.Where(t => !t.Key.Flipped && t.Value.Count(edge => edges[edge].Length == 1) == 2);
-        if (isPart1) return corners.Aggregate(1L, (prod, c) => prod * c.Key.Id).ToString();
+        var corners = tiles.Where(t => t.Value.Count(edge => edges[edge].Length == 1) == 2).Select(p => p.Key);
+        if (isPart1) return corners.Where(c => !c.Flipped).Aggregate(1L, (prod, c) => prod * c.Id).ToString();
 
-        List<List<Tile>> jigsaw = [[corners.First().Key.Rotate(corners.First().Key.Corner(edges))]];
+        // generate all 4x2 orientations of the puzzle.  Each corner in the top left, flipped or unflipped.
+        // This way, we only have to look for one orientation of sea monster.  Half of one, six dozen of the other.
+        var jigsaws = corners.Select(c => new List<List<Tile>>() { new() { c.Rotate(c.Corner(edges)) } }).ToArray();
 
-        while (TryConnect(2, jigsaw[^1][0], edges, out var connectSouth))
+        foreach (var jigsaw in jigsaws)
         {
-            if (jigsaw[^1].Count > 1) jigsaw.Add([connectSouth]);
-
-            while (TryConnect(1, jigsaw[^1][^1], edges, out var connectEast))
+            while (TryConnect(2, jigsaw[^1][0], edges, out var connectSouth))
             {
-                jigsaw[^1].Add(connectEast);
-            }
-        }
+                if (jigsaw[^1].Count > 1) jigsaw.Add([connectSouth]);
 
-        var fullGrid = new Grid.Helper(Stitch(jigsaw, grids));
-        foreach (var y in fullGrid.Ranges[0])
-        {
-            foreach (var x in fullGrid.Ranges[1])
-            {
-                Console.Write((y % 10, x % 10) switch
+                while (TryConnect(1, jigsaw[^1][^1], edges, out var connectEast))
                 {
-                    (0 or 9, _) => fullGrid[[y, x]],
-                    (_, 0 or 9) => fullGrid[[y, x]],
-                    (4, 4) => jigsaw[y / 10][x / 10].Flipped ? 'f' : '-',
-                    (5, 5) => jigsaw[y / 10][x / 10].Rotation.ToString(),
-                    _ => ' '
-                });
+                    jigsaw[^1].Add(connectEast);
+                }
             }
-            Console.WriteLine();
         }
 
-        return string.Empty;
+        var fullGrids = jigsaws.Select(jigsaw => new Grid.Helper(Stitch(jigsaw, grids))).ToArray();
+        var seaMonster = new Grid.Helper([
+            "                  # ",
+            "#    ##    ##    ###",
+            " #  #  #  #  #  #   "]);
+        var monsterSegments = 0;
+        foreach (var fullGrid in fullGrids)
+        {
+            for (var y = 0; y <= fullGrid.Max[0] - seaMonster.Max[0]; y++)
+            {
+                for (var x = 0; x <= fullGrid.Max[1] - seaMonster.Max[1]; x++)
+                {
+                    // Assume sea monsters don't overlap one another
+                    monsterSegments += seaMonster['#'].All(p => fullGrid[[p[0] + y, p[1] + x]] == '#') ? seaMonster['#'].Count : 0;
+                }
+            }
+        }
+
+        return $"{fullGrids[0]['#'].Count - monsterSegments}";
     }
 
     private static IEnumerable<string> Stitch(List<List<Tile>> jigsaw, Dictionary<int, Grid.Helper> grids)
     {
-        var borderWidth = 0;
         foreach (var row in jigsaw.AsEnumerable().Reverse())
         {
-            foreach (var y in grids[row[0].Id].Ranges[0].Skip(borderWidth).SkipLast(borderWidth))
+            foreach (var y in grids[row[0].Id].Ranges[0].Skip(1).SkipLast(1))
             {
-                var sb = new StringBuilder();
+                var sb = new System.Text.StringBuilder();
 
                 foreach (var piece in row)
                 {
                     var grid = grids[piece.Id];
-                    foreach (var x in grid.Ranges[1].Skip(borderWidth).SkipLast(borderWidth))
+                    foreach (var x in grid.Ranges[1].Skip(1).SkipLast(1))
                     {
-                        int[] yx = (piece.Flipped, piece.Rotation) switch
+                        sb.Append(grids[piece.Id][(piece.Flipped, piece.Rotation) switch
                         {
                             (false, 2) => [y, x],
                             (true, 2)  => [y, grid.Max[1] - x],
@@ -90,8 +92,7 @@ public class Day20(bool isPart1) : IAdventPuzzle
                             (false, 3) => [x, grid.Max[0] - y],
                             (true, 3)  => [x, y],
                             _ => throw new NotImplementedException("unknown orientation")
-                        };
-                        sb.Append(grids[piece.Id][yx]);
+                        }]);
                     }
                 }
                 yield return sb.ToString();
