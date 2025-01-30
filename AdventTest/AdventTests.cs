@@ -12,16 +12,17 @@ public static class AdventTests
     public static void TestPuzzle(Type day, int part, string solution)
     {
         using var input = InputHelper.Create(day);
+        ArgumentNullException.ThrowIfNull(input);
         var puzzle = IAdventPuzzle.Solver(day, part);
-        Assert.Equal(solution, puzzle.Solve(input!));
+        Assert.Equal(solution, puzzle.Solve(input));
     }
 }
 
 public abstract class AdventSolutions : TheoryData<Type, int, string>
 {
-    protected abstract IReadOnlyDictionary<Type, IEnumerable<string>> Solutions { get; }
+    protected abstract IReadOnlyDictionary<Type, IEnumerable<object>> Solutions { get; }
     protected AdventSolutions() => AddRange(
-        Solutions.SelectMany(kvp => kvp.Value.Select((x, i) => new TheoryDataRow<Type, int, string>(kvp.Key, i + 1, x)
+        Solutions.SelectMany(kvp => kvp.Value.Select((x, i) => new TheoryDataRow<Type, int, string>(kvp.Key, i + 1, x.ToString() ?? string.Empty) 
             .WithTestDisplayName($"{IAdventPuzzle.Year(kvp.Key)}.{IAdventPuzzle.Day(kvp.Key)}.{i + 1}")
             .WithTrait("Year", IAdventPuzzle.Year(kvp.Key))
             .WithTrait("Day", IAdventPuzzle.Day(kvp.Key))

@@ -19,7 +19,7 @@ public class Day16(bool isPart1) : IAdventPuzzle
 
     public string Solve(InputHelper inputHelper)
     {
-        var grid = new GridHelper(inputHelper.EachLine());
+        var grid = new Grid.Helper(inputHelper.EachLine());
         var start = grid['S'].Single();
 
         var reachable = new Dictionary<Tile, int>();

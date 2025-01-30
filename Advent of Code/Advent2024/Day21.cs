@@ -4,7 +4,7 @@ namespace Advent_of_Code.Advent2024;
 
 public partial class Day21(bool isPart1) : IAdventPuzzle
 {
-    private sealed class RobotArm(GridHelper grid, Func<IReadOnlyDictionary<(char, char), long>, IReadOnlyDictionary<(char, char), long>>? presequencer = null)
+    private sealed class RobotArm(Grid.Helper grid, Func<IReadOnlyDictionary<(char, char), long>, IReadOnlyDictionary<(char, char), long>>? presequencer = null)
     {
         private sealed class Orderer(string order) : IComparer<char>
         {
@@ -63,13 +63,13 @@ public partial class Day21(bool isPart1) : IAdventPuzzle
 
     public string Solve(InputHelper inputHelper)
     {
-        var grid = new GridHelper(["789", "456", "123", " 0A", " ^B", "<v>"]);
+        var grid = new Grid.Helper(["789", "456", "123", " 0A", " ^B", "<v>"]);
         var robots = new List<RobotArm>() { new(grid) };
         for (var i = 0; i < 25; i++)
             robots.Add(new(grid, robots[i].Sequences));
 
         return inputHelper.EachLine(line => (
-                numeric: long.Parse(Integer().Match(line).ValueSpan),
+                numeric: long.Parse(Integer.Match(line).ValueSpan),
                 transitions: line.Prepend('A').Zip(line).ToDictionary(x => x, _ => 1L)))
             .Sum(FinalScore).ToString();
 
@@ -78,5 +78,5 @@ public partial class Day21(bool isPart1) : IAdventPuzzle
     }
 
     [GeneratedRegex(@"-?\d+")]
-    private static partial Regex Integer();
+    private static partial Regex Integer { get; }
 }

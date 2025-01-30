@@ -1,27 +1,17 @@
-﻿using System.ComponentModel;
-
-namespace Advent_of_Code.Advent2022;
+﻿namespace Advent_of_Code.Advent2022;
 
 public class Day09(bool isPart1) : IAdventPuzzle
 {
-    private sealed class Knot
+    private readonly record struct Knot(int X, int Y)
     {
-        private int _X = 0, _Y = 0;
-        public (int x, int y) Position => (_X, _Y);
-        public static Knot operator +(Knot a, (int dx, int dy) b)
-        {
-            a._X += b.dx;
-            a._Y += b.dy;
-            return a;
-        }
-        public static (int dx, int dy) operator -(Knot a, Knot b) => (a._X - b._X, a._Y - b._Y);
-        public static (int dx, int dy) OneStepToward(int dx, int dy) => (Math.Sign(dx), Math.Sign(dy));
+        public static Knot operator +(Knot a, (int dx, int dy) b) => new(a.X + Math.Sign(b.dx), a.Y + Math.Sign(b.dy));
+        public static (int dx, int dy) operator -(Knot a, Knot b) => (a.X - b.X, a.Y - b.Y);
     }
 
     public string Solve(InputHelper inputHelper)
     {
         var rope = Enumerable.Repeat(0, isPart1 ? 2 : 10).Select(_ => new Knot()).ToArray();
-        var seenTail = new HashSet<(int, int)>() { (0, 0) };
+        var seenTail = new HashSet<Knot>();
         foreach (var move in inputHelper.EachLine(line => line.Split(' ')).Select(parts => (direction: parts[0], distance: int.Parse(parts[1]))))
         {
             var direction = move.direction switch
@@ -40,9 +30,9 @@ public class Day09(bool isPart1) : IAdventPuzzle
                     var (dx, dy) = rope[i - 1] - rope[i];
                     if (Math.Abs(dx) < 2 && Math.Abs(dy) < 2)
                         break; // rope is settled, we can skip the rest of the knots
-                    rope[i] += Knot.OneStepToward(dx, dy);
+                    rope[i] += (dx, dy);
                 }
-                seenTail.Add(rope[^1].Position);
+                seenTail.Add(rope[^1]);
             }
         }
         return seenTail.Count.ToString();

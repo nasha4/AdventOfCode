@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Diagnostics.CodeAnalysis;
-
-namespace Advent_of_Code.Advent2024;
+﻿namespace Advent_of_Code.Advent2024;
 
 public class Day23(bool isPart1) : IAdventPuzzle
 {
@@ -15,8 +12,8 @@ public class Day23(bool isPart1) : IAdventPuzzle
                 (null, _) => false,
                 (_, _) => x.SequenceEqual(y) // assume cliques are always ordered
             };
-        public override int GetHashCode([DisallowNull] string[] obj) =>
-            (obj as IStructuralEquatable).GetHashCode(EqualityComparer<string>.Default);
+        public override int GetHashCode([System.Diagnostics.CodeAnalysis.DisallowNull] string[] obj) =>
+            (obj as System.Collections.IStructuralEquatable).GetHashCode(EqualityComparer<string>.Default);
     }
 
     private Dictionary<string, HashSet<string>> adj = [];

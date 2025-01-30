@@ -7,7 +7,7 @@ public partial class Day14(bool isPart1) : IAdventPuzzle
     public string Solve(InputHelper inputHelper)
     {
         var (maxX, maxY, seconds) = (101, 103, 100);
-        var robots = inputHelper.EachLine(line => Integer().Matches(line))
+        var robots = inputHelper.EachLine(line => Integer.Matches(line))
             .Select(ms => ms.Select(m => int.Parse(m.Value)).ToArray())
             .Select(n => (x0: n[0], y0: n[1], dx: n[2], dy: n[3]))
             .ToList();
@@ -30,15 +30,11 @@ public partial class Day14(bool isPart1) : IAdventPuzzle
             robots.ForEach(r => grid[((r.y0 + r.dy * i) % maxY + maxY) % maxY][((r.x0 + r.dx * i) % maxX + maxX) % maxX] = '@');
             var lines = grid.Select(row => new string(row));
             if (lines.Count(line => line.Contains("@@@@@@")) > 9)
-            {
-                //Console.WriteLine(i);
-                //Console.WriteLine(string.Join('\n', lines));
                 return i.ToString();
-            }
         }
         return "???";
     }
 
     [GeneratedRegex(@"-?\d+")]
-    private static partial Regex Integer();
+    private static partial Regex Integer { get; }
 }

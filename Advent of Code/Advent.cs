@@ -7,9 +7,10 @@ internal static class Program
     private static void Main(string[] args)
     {
         var totalElapsed = 0L;
-        foreach (var puzzle in IAdventPuzzle.GetPuzzles(args[0]))
+        var day = args.Length > 1 && int.TryParse(args[1], out var single) ? single : 0;
+        foreach (var (puzzle, parts) in IAdventPuzzle.GetPuzzles(args[0], day))
         {
-            for (int part = 1; part <= (puzzle.Name == "Day25" ? 1 : 2); part++)
+            for (int part = 1; part <= parts; part++)
             {
                 var solver = IAdventPuzzle.Solver(puzzle, part);
 
@@ -33,4 +34,4 @@ internal static class Program
         }
         Console.WriteLine($"Total elapsed: {totalElapsed}ms");
     }
-}
+} 

@@ -4,9 +4,10 @@ public class Day25(bool isPart1) : IAdventPuzzle
 {
     private readonly record struct Snafu(long Value)
     {
+        private const string Radix = "=-012";
         public Snafu(string snafu) : this(snafu
             .Reverse()
-            .Zip(powers5, (a, b) => b * a switch { '2' => 2, '1' => 1, '-' => -1, '=' => -2, _ => 0 })
+            .Zip(powers5, (a, b) => b * (Radix.IndexOf(a) - 2))
             .Sum())
         { }
         public override string ToString()
@@ -17,10 +18,10 @@ public class Day25(bool isPart1) : IAdventPuzzle
                 .digits;
             // add 2 to every digit, with carry
             var (carry, digits) = base5.SkipWhile(x => x == 0).Reverse()
-                .Aggregate((carry: 0L, digits: Enumerable.Empty<long>()),
-                    (acc, term) => ((acc.carry + term + 2) / 5, acc.digits.Append((acc.carry + term + 2) % 5)));
+                .Aggregate((carry: 0, digits: Enumerable.Empty<int>()),
+                    (acc, term) => ((int)((acc.carry + term + 2) / 5), acc.digits.Append((int)((acc.carry + term + 2) % 5))));
             // subtract 2 from each digit, except for final carry (if any)
-            var snafu = digits.Select(x => x switch { 4 => '2', 3 => '1', 2 => '0', 1 => '-', 0 => '=', _ => 'X' });
+            var snafu = digits.Select(x => Radix[x]);
             if (carry > 0) snafu = snafu.Append('1');
             return string.Join(string.Empty, snafu.Reverse());
         }

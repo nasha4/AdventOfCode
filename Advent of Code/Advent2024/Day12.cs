@@ -4,7 +4,7 @@ public class Day12(bool isPart1) : IAdventPuzzle
 {
     public string Solve(InputHelper inputHelper)
     {
-        var grid = new GridHelper(inputHelper.EachLine());
+        var grid = new Grid.Helper(inputHelper.EachLine());
         var corners = new[] { 1, 0, 0, 1, 1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 0, 1 }.Chunk(2).Chunk(2);
 
         var perimeters = new List<int>();
@@ -23,10 +23,10 @@ public class Day12(bool isPart1) : IAdventPuzzle
                     var adj = grid.Orthogonal(q).Where(a => grid[a] == grid[q]);
                     adj.Where(a => !regions.ContainsKey(a)).ToList().ForEach(flood.Enqueue);
                     perimeters[^1] += 4 - adj.Count();
-                    sides[^1] += corners.Count(corner => corner.All(c => grid[q] != grid[Cartesian<int>.VectorAdd(q, c)]));
+                    sides[^1] += corners.Count(corner => corner.All(c => grid[q] != grid[Cartesian<int>.VectorSum(q, c)]));
                     sides[^1] += corners.Count(corner => corner.All(c =>
-                        grid[q] == grid[Cartesian<int>.VectorAdd(q, c)] &&
-                        grid[q] != grid[Cartesian<int>.VectorAdd([q, .. corner])]));
+                        grid[q] == grid[Cartesian<int>.VectorSum(q, c)] &&
+                        grid[q] != grid[Cartesian<int>.VectorSum([q, .. corner])]));
                 }
             }
         }

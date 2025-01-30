@@ -2,75 +2,66 @@
 
 public class Day13(bool isPart1) : IAdventPuzzle
 {
-    private sealed class Packet
+    private interface IPacket : IComparable<IPacket>
     {
-        private Packet(int asInt) => (AsInt, AsList, IsInt) = (asInt, [this], true);
-        private Packet(List<Packet> asList) => (AsInt, AsList, IsInt) = (0, asList, false);
-        private readonly int AsInt;
-        private readonly List<Packet> AsList;
-        private readonly bool IsInt;
-        public override string ToString() => IsInt ? AsInt.ToString() : $"[{string.Join(',', AsList.Select(x => x.ToString()))}]";
+        List<IPacket> AsList { get; }
 
-        public static Packet Parse(string text)
+        int IComparable<IPacket>.CompareTo(IPacket? other) => (this, other) switch
+        {
+            (_, null) => 1,
+            (Int a, Int b) => a.AsInt.CompareTo(b.AsInt),
+            _ => ListCompare(AsList, other.AsList)
+        };
+        private static int ListCompare(List<IPacket> a, List<IPacket> b)
+        {
+            for (int i = 0; i < a.Count || i < b.Count; i++)
+            {
+                if (i >= a.Count) return -1;
+                if (i >= b.Count) return 1;
+                if (a[i].CompareTo(b[i]) is var cmp and not 0) return cmp;
+            }
+            return 0;
+        }
+        public static bool operator <=(IPacket left, IPacket right) => left.CompareTo(right) <= 0;
+        public static bool operator >=(IPacket left, IPacket right) => left.CompareTo(right) >= 0;
+        public static IPacket Parse(string text)
         {
             ArgumentException.ThrowIfNullOrEmpty(text);
             if (text[0] == '[')
             {
-                var list = new List<Packet>();
-                var braceCount = 1;
-                var prevComma = 1;
+                var list = new List<IPacket>();
+                var (braceCount, prevComma) = (1, 1);
                 for (int i = 1; i < text.Length; i++)
                 {
-                    if ((text[i] == ',' || text[i] == ']') && braceCount == 1)
+                    if (text[i] is ',' or ']' && braceCount == 1)
                     {
                         var item = text[prevComma..i];
                         if (!string.IsNullOrEmpty(item))
                             list.Add(Parse(item));
                         prevComma = i + 1;
                     }
-                    if (text[i] == '[') braceCount++;
-                    if (text[i] == ']') braceCount--;
+                    braceCount += text[i] switch { '[' => 1, ']' => -1, _ => 0 };
                 }
-                return new(list);
+                return new List(list);
             }
-            else
-            {
-                return new(int.Parse(text));
-            }
+            return new Int(int.Parse(text));
         }
 
-        public static bool operator <=(Packet left, Packet right) => Comparer.Compare(left, right) <= 0;
-        public static bool operator >=(Packet left, Packet right) => Comparer.Compare(left, right) >= 0;
-
-        public static IComparer<Packet> Comparer { get; } = new PacketComparer();
-
-        private sealed class PacketComparer : IComparer<Packet>
+        private readonly record struct Int(int AsInt) : IPacket
         {
-            public int Compare(Packet? x, Packet? y)
-            {
-                switch (x,y) {
-                    case (null, null): return 0;
-                    case (null, _): return -1;
-                    case (_, null): return 1;
-                    case (_,_) when x.IsInt && y.IsInt: return x.AsInt.CompareTo(y.AsInt);
-                    default:
-                        var (lList, rList) = (x.AsList, y.AsList);
-                        for (int i = 0; i < lList.Count || i < rList.Count; i++)
-                        {
-                            if (i >= lList.Count) return -1;
-                            if (i >= rList.Count) return 1;
-                            var cmp = Compare(lList[i], rList[i]);
-                            if (cmp != 0) return cmp;
-                        }
-                        return 0;
-                }
-            }
+            public readonly List<IPacket> AsList => [this];
+            public override string ToString() => AsInt.ToString();
+
+        }
+        private readonly record struct List(List<IPacket> AsList) : IPacket
+        {
+            public override string ToString() => $"[{string.Join(',', AsList.Select(x => x.ToString()))}]";
         }
     }
 
     public string Solve(InputHelper inputHelper)
     {
-        var packets = inputHelper.EachLine().Where(s => !string.IsNullOrEmpty(s)).Select(line => Packet.Parse(line)).ToList();
+        var packets = inputHelper.EachLine().Where(s => !string.IsNullOrEmpty(s)).Select(IPacket.Parse).ToList();
 
         if (isPart1)
             return packets.Chunk(2)
@@ -79,10 +70,10 @@ public class Day13(bool isPart1) : IAdventPuzzle
                 .Sum(x => x.i + 1) // 1-based index
                 .ToString();
 
-        var divider2 = Packet.Parse("[[2]]");
-        var divider6 = Packet.Parse("[[6]]");
+        var divider2 = IPacket.Parse("[[2]]");
+        var divider6 = IPacket.Parse("[[6]]");
         packets.AddRange(divider2, divider6);
-        packets.Sort(Packet.Comparer);
+        packets.Sort();
         return $"{(packets.IndexOf(divider2) + 1) * (packets.IndexOf(divider6) + 1)}";
     }
 }
