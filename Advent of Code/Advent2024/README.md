@@ -26,6 +26,8 @@
   - [Day 24: Crossed Wires](#day-24-crossed-wires)
   - [Day 25: Code Chronicle](#day-25-code-chronicle)
 
+![Lines of code and total elapsed runtime for each day's puzzles (combined)](aoc2024.png)
+
 ## [Day 1: Historian Hysteria](https://adventofcode.com/2024/day/1)
 [[22 LOC / 1ms / 3ms](Day01.cs)]
 Already my lines-of-code count is unreliable since I am not counting the use of my homebrew [InputHelper.cs](../InputHelper.cs) to streamline some of the boilerplate parsing code. In 2022 I was just pasting the input file into STDIN. This is a lot nicer!
