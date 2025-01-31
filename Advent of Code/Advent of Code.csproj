@@ -9,11 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Advent2023\**" />
     <Compile Remove="old\**" />
-    <EmbeddedResource Remove="Advent2023\**" />
     <EmbeddedResource Remove="old\**" />
-    <None Remove="Advent2023\**" />
     <None Remove="old\**" />
   </ItemGroup>
 
