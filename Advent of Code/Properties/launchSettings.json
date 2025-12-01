@@ -15,6 +15,10 @@
     "Advent2024": {
       "commandName": "Project",
       "commandLineArgs": "Advent2024"
+    },
+    "Advent2025": {
+      "commandName": "Project",
+      "commandLineArgs": "Advent2025"
     }
   }
 }

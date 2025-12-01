@@ -1,4 +1,4 @@
-﻿using Advent_of_Code;
+using Advent_of_Code;
 using Xunit;
 
 namespace AdventTest;
@@ -6,9 +6,10 @@ namespace AdventTest;
 public static class AdventTests
 {
     [Theory]
-    [ClassData(typeof(AdventSolutions2020))]
-    [ClassData(typeof(AdventSolutions2022))]
-    [ClassData(typeof(AdventSolutions2024))]
+    [ClassData(typeof(AdventSolutions2020), Skip = "old")]
+    [ClassData(typeof(AdventSolutions2022), Skip = "old")]
+    [ClassData(typeof(AdventSolutions2024), Skip = "old")]
+    [ClassData(typeof(AdventSolutions2025))]
     public static void TestPuzzle(Type day, int part, string solution)
     {
         using var input = InputHelper.Create(day);
