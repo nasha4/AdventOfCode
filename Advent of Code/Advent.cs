@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 
 namespace Advent_of_Code;
 
@@ -6,7 +6,7 @@ internal static class Program
 {
     private static void Main(string[] args)
     {
-        var totalElapsed = 0L;
+        var totalElapsed = TimeSpan.Zero;
         var day = args.Length > 1 && int.TryParse(args[1], out var single) ? single : 0;
         foreach (var (puzzle, parts) in IAdventPuzzle.GetPuzzles(args[0], day))
         {
@@ -27,11 +27,11 @@ internal static class Program
                     var timer = Stopwatch.StartNew();
                     var result = solver.Solve(input);
                     timer.Stop();
-                    totalElapsed += timer.ElapsedMilliseconds;
-                    Console.WriteLine($"{puzzle.Name} part{part}: {result} in {timer.ElapsedMilliseconds}ms");
+                    totalElapsed += timer.Elapsed;
+                    Console.WriteLine($"{puzzle.Name} part{part}: {result} in {timer.Elapsed.TotalMilliseconds:g3}ms");
                 }
             }
         }
-        Console.WriteLine($"Total elapsed: {totalElapsed}ms");
+        Console.WriteLine($"Total elapsed: {totalElapsed.TotalMilliseconds:g4}ms");
     }
 } 
