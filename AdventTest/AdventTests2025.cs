@@ -7,5 +7,7 @@ public class AdventSolutions2025 : AdventSolutions
     protected override Dictionary<Type, IEnumerable<object>> Solutions { get; } = new()
     {
         [typeof(Day01)] = [1129, 6638],
+        [typeof(Day02)] = [40214376723, 50793864718],
+        [typeof(Day03)] = [17263, 170731717900423],
     };
 }
