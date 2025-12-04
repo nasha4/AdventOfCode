@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
@@ -26,8 +26,6 @@ public abstract class Grid<T> where T : INumber<T>
         public virtual TItem? this[T[] index] => MyGrid.GetValueOrDefault(index);
         public virtual IReadOnlySet<T[]> this[TItem index] => MyItems.GetValueOrDefault(index, _empty);
 
-        [SuppressMessage("Blocker Bug", "S2190:Loops and recursions should not be infinite", Justification = "this one should")]
-        [SuppressMessage("Critical Code Smell", "S1994:\"for\" loop increment clauses should modify the loops' counters", Justification = "no counter")]
         public static IEnumerable<T> Sequence { get { for (var n = T.Zero; ; n++) yield return n; } }
 
         private static readonly HashSet<T[]> _empty = Enumerable.Empty<T[]>().ToHashSet(ArrayComparer<T>.Comparer);
