@@ -1,7 +1,8 @@
-﻿using System.Text.RegularExpressions;
+using System.Collections;
+using System.Text.RegularExpressions;
 
 namespace Advent_of_Code;
-public partial class InputHelper : IDisposable
+public partial class InputHelper : IEnumerable<string>, IDisposable
 {
     private static readonly FileStreamOptions options = new() { Access = FileAccess.Read, BufferSize = 25_000, Options = FileOptions.SequentialScan };
     private readonly StreamReader reader;
@@ -74,6 +75,14 @@ public partial class InputHelper : IDisposable
         for (Match match = regex.Match(reader.ReadToEnd()); match.Success; match = match.NextMatch())
             yield return function(match.Groups.Values.Select(x => x.Value).ToArray());
     }
+
+    public IEnumerator<string> GetEnumerator()
+    {
+        for (var line = reader.ReadLine(); line is not null; line = reader.ReadLine())
+            yield return line;
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     [GeneratedRegex(@"\n\s*\n")]
     private static partial Regex DoubleLineBreak();

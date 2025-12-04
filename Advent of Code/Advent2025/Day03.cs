@@ -2,7 +2,7 @@ namespace Advent_of_Code.Advent2025;
 
 public class Day03(bool isPart1) : IAdventPuzzle
 {
-    public string Solve(InputHelper inputHelper) => inputHelper.EachLine(line => line).Sum(bank => MaxJoltage(bank, isPart1 ? 2 : 12)).ToString();
+    public string Solve(InputHelper inputHelper) => inputHelper.Sum(bank => MaxJoltage(bank, isPart1 ? 2 : 12)).ToString();
 
     private static long MaxJoltage(string bank, int size) => Enumerable.Range(0, size).Reverse().Aggregate((bank, sum: 0L), NextBest).sum;
 
