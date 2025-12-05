@@ -4,6 +4,7 @@
   - [Day 2: Gift Shop](#day-2-gift-shop)
   - [Day 3: Lobby](#day-3-lobby)
   - [Day 4: Printing Department](#day-4-printing-department)
+  - [Day 5: Cafeteria](#day-5-cafeteria)
 
 ## [Day 1: Secret Entrance](https://adventofcode.com/2025/day/1)
 [[12 LOC / 0.68ms / 0.71ms](Day01.cs)]
@@ -30,3 +31,11 @@ I could smell part two coming from part one; it looked like a dynamic programmin
 [[17 LOC / 120ms / 570ms](Day04.cs)]
 I had to remember how the heck to use my [GridHelper.cs](../GridHelper.cs) class to do this one.  `Grid.Helper` is an `IEqualityComparer`, so that's neat.
 This puzzle is one where part 1 had me dreading what part 2 might be, but part 2 turned out to be pretty tame!
+
+## [Day 5: Cafeteria](https://adventofcode.com/2025/day/5)
+[[24 LOC / 9.0ms / 1.4ms](Day05.cs)]
+Part 1 was very easy, which, again, always makes me scared of what part 2 might be!  Not that scary though, as it turns out.  Part 2 reminds me a lot of
+[Advent 2022 Day 15](https://adventofcode.com/2022/day/15), at least [the way I approached that one](../Advent2022/Day15.cs).  I think my solution for today's
+part 2 is O(n²) and I know there is an O(n⋅log₂n) solution or better, but the inputs are small enough that I am definitely not going to bother.  At this
+scale, I think my execution time is mostly I/O bound anyway.  (Would `IAsyncEnumerable`s improve that at all, I wonder?  Should my `InputHelper`
+just fully buffer the input files before we start timing??  Probably!)
