@@ -13,5 +13,6 @@ public class AdventSolutions2025 : AdventSolutions
         [typeof(Day05)] = [509, 336790092076620],
         [typeof(Day06)] = [5595593539811, 10153315705125],
         [typeof(Day07)] = [1553, 15811946526915],
+        [typeof(Day08)] = [105952, 975931446],
     };
 }
