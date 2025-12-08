@@ -7,6 +7,7 @@
   - [Day 5: Cafeteria](#day-5-cafeteria)
   - [Day 6: Trash Compactor](#day-6-trash-compactor)
   - [Day 7: Laboratories](#day-7-laboratories)
+  - [Day 8: Playground](#day-8-playground)
 
 ## [Day 1: Secret Entrance](https://adventofcode.com/2025/day/1)
 [[12 LOC / 0.68ms / 0.71ms](Day01.cs)]
@@ -52,3 +53,14 @@ actually be pretty easy in Excel too.
 [[27 LOC / 32ms / 46ms](Day07.cs)]
 This one was a lot of fun too.  Not much to it, which I don't mean as a bad thing: both parts are simple and elegant, and the second followed nicely from
 the first.  (Sometimes I like the horrific Twilight Zone puzzle twists though!)  I think my `Grid.Helper` really pulled its weight in solving this one fast.
+
+## [Day 8: Playground](https://adventofcode.com/2025/day/8)
+[[25 LOC / 126ms / 256ms](Day08.cs)]
+Sometimes an AoC puzzle is difficult because it's deliberately hard to understand what it's even asking for, or it is otherwise described in a deliberately
+roundabout way.  I would not put this one in that category; the description is all pretty clear, especially now that I reread it.  I still initially found it
+hard to visualize the steps involved, and I do think certain details were thrown in as red herrings.  I guess my difficulty was just that it's hard to step
+through the logic of "Ah yes, my program thinks `906,360,560` and `592,479,940` are the next closest pair, and I can confirm or deny that myself by… *?????*"
+
+The puzzles so far, including this one, have been what I would consider "easier" compared to previous years overall.  That's fine — they have still been
+challenging and fun to solve — but it means either the whole year will be be easy (disappointing), or there are some [monsters
+lurking](https://adventofcode.com/2020/day/20#part2) in days 9–12.  And in prior years, the final day has always been a cooldown!  *We'll see…*
